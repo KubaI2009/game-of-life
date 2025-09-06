@@ -22,9 +22,10 @@ public class RenderedCell : Button, IControlWithMaster
         Size = size;
         Cell = cell;
         
-        BackColor = Color.Black;
         IsActive = true;
         Click += ClickEvent;
+        
+        Render();
     }
 
     public void Render()

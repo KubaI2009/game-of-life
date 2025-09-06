@@ -66,8 +66,7 @@ public class Board
 
         foreach (Cell cell in _cells)
         {
-            Cell otherCell = other.CellAt(cell.Position);
-            CellState[] neighborStates = GetStatesOfCells(GetNeighborsOfPosition(otherCell.Position));
+            CellState[] neighborStates = GetStatesOfCells(other.GetNeighborsOfPosition(cell.Position));
             
             cell.Update(neighborStates);
         }
@@ -131,6 +130,40 @@ public class Board
             //Console.WriteLine(i);
             CellAt(i).OverwriteState(other.CellAt(i));
         }
+    }
+
+    public void PrintRepresentation()
+    {
+        PrintRepresentation("");
+    }
+
+    public void PrintRepresentation(string prefix)
+    {
+        PrintSeparator(prefix);
+
+        for (int i = 0; i < Height; i++)
+        {
+            Console.Write(prefix);
+            
+            for (int j = 0; j < Width; j++)
+            {
+                Console.Write(CellAt(j, i).State.IsAlive ? "x" : "=");
+            }
+
+            Console.WriteLine();
+        }
+    }
+
+    private void PrintSeparator(string prefix)
+    {
+        Console.Write(prefix);
+        
+        for (int i = 0; i < Width; i++)
+        {
+            Console.Write("-");
+        }
+
+        Console.WriteLine();
     }
 
     public override string ToString() => "<GameOfLife.util.board.Board>";

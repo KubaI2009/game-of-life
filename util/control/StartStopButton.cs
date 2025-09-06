@@ -45,6 +45,6 @@ public class StartStopButton : Button, IControlWithMaster
     public void SetToStop()
     {
         Click -= _start;
-        Click += _start;
+        Click += _stop;
     }
 }

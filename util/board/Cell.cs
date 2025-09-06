@@ -2,10 +2,10 @@
 
 namespace GameOfLife.util.board;
 
-public class Cell(CellState startingState, CellPosition position, HashSet<int> birthNumsNeighborNumbers, HashSet<int> deathNumsNeighborNumbers)
+public class Cell(CellState startingState, CellPosition position, HashSet<int> birthNumsNeighborNumbers, HashSet<int> surviveNumsNeighborNumbers)
 {
     private HashSet<int> _birthNums = birthNumsNeighborNumbers;
-    private HashSet<int> _deathNums = deathNumsNeighborNumbers;
+    private HashSet<int> _surviveNums = surviveNumsNeighborNumbers;
     
     public CellState State { get; protected set; } = startingState;
     public CellPosition Position { get; protected set; } = position;
@@ -47,7 +47,7 @@ public class Cell(CellState startingState, CellPosition position, HashSet<int> b
     {
         int alive = CountLiving(neighborStates);
 
-        if (IsAlive && _deathNums.Contains(alive))
+        if (IsAlive && !_surviveNums.Contains(alive))
         {
             Kill();
             return;

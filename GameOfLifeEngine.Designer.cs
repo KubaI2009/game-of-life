@@ -122,9 +122,11 @@ partial class GameOfLifeEngine
         _referenceBoard = _board.Copy();
         _renderedBoard = new List<RenderedCell>();
 
+        //_board.CellAt(2, 3).SwitchState();
+        
         for (int i = 0; i < _board.Size; i++)
         {
-            Cell cell = _board.CellAt(i);
+            Cell cell = _referenceBoard.CellAt(i);
             
             _renderedBoard.Add(new RenderedCell(this, $"cl{cell.X}_{cell.Y}", LocationOf(cell.Position), new Size(CellWidth, CellHeight), cell));
         }
@@ -157,7 +159,7 @@ partial class GameOfLifeEngine
     private void UpdateBoard()
     {
         _board.Update(_referenceBoard);
-        _referenceBoard = _board.Copy();
+        _referenceBoard.Overwrite(_board);
     }
 
     private void UpdateRenderedBoard()
@@ -207,6 +209,11 @@ partial class GameOfLifeEngine
     
     private void StartEvent(object? sender, EventArgs? e)
     {
+        _board.Overwrite(_referenceBoard);
+        
+        //_board.PrintRepresentation();
+        //_referenceBoard.PrintRepresentation("rrrr");
+        
         DisableCellClicking();
         InitTimer();
 
@@ -220,10 +227,13 @@ partial class GameOfLifeEngine
     private void UpdateEvent(object? sender, EventArgs? e)
     {
         _ticks++;
-        Console.WriteLine(_ticks);
+        //Console.WriteLine(_ticks);
         
         UpdateBoard();
         UpdateRenderedBoard();
+        
+        //_board.PrintRepresentation();
+        //_referenceBoard.PrintRepresentation("rrrr");
     }
 
     private void StopEvent(object? sender, EventArgs? e)
