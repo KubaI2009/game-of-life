@@ -12,7 +12,17 @@ public class Cell(CellState startingState, CellPosition position, HashSet<int> b
 
     public bool IsAlive
     {
-        get => State == CellState.Alive;
+        get => State.IsAlive;
+    }
+
+    public int X
+    {
+        get => Position.X;
+    }
+
+    public int Y
+    {
+        get => Position.Y;
     }
     
     public Cell(CellState startingState, CellPosition position) : 
@@ -60,6 +70,11 @@ public class Cell(CellState startingState, CellPosition position, HashSet<int> b
         
         BeBorn();
     }
+
+    public void OverwriteState(Cell other)
+    {
+        State = other.State;
+    }
     
     public override string ToString() => "<GameOfLife.util.board.Cell>";
 
@@ -69,7 +84,7 @@ public class Cell(CellState startingState, CellPosition position, HashSet<int> b
 
         foreach (CellState state in states)
         {
-            alive += state == CellState.Alive ? 1 : 0;
+            alive += state.IsAlive ? 1 : 0;
         }
         
         return alive;

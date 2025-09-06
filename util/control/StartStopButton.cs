@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using GameOfLife.util.collection;
 
 namespace GameOfLife.util.control;
 
@@ -7,22 +6,45 @@ public class StartStopButton : Button, IControlWithMaster
 {
     private static readonly string s_startText = "Start";
     private static readonly string s_stopText = "Stop";
-    
-    private static readonly TwoStateSwitch<string> s_texts = new TwoStateSwitch<string>(s_startText, s_stopText);
+
+    private EventHandler _start;
+    private EventHandler _stop;
     
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Form Master { get; protected set; }
     
-    public StartStopButton(Form master, string name, Point location, Size size) : base()
+    public StartStopButton(Form master, string name, Point location, Size size, EventHandler startEvent, EventHandler stopEvent) : base()
     {
-        this.Master = master;
-        this.Name = name;
-        this.Location = location;
-        this.Size = size;
+        Master = master;
+        Name = name;
+        Location = location;
+        Size = size;
         
-        this.BackColor = Color.Transparent;
-        this.Text = s_texts.FirstValue;
-        this.FlatStyle = FlatStyle.Flat;
-        this.FlatAppearance.BorderSize = 0;
+        _start = startEvent;
+        _stop = stopEvent;
+        
+        Click += _start;
+        
+        BackColor = Color.Transparent;
+        Text = s_startText;
+        FlatStyle = FlatStyle.Flat;
+        FlatAppearance.BorderSize = 0;
+    }
+
+    public void SwapText()
+    {
+        Text = Text == s_startText ? s_stopText : s_startText;
+    }
+
+    public void SetToStart()
+    {
+        Click -= _stop;
+        Click += _start;
+    }
+
+    public void SetToStop()
+    {
+        Click -= _start;
+        Click += _start;
     }
 }

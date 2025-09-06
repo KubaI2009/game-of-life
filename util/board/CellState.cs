@@ -1,7 +1,7 @@
 ﻿namespace GameOfLife.util.board;
 
-public enum CellState
+public record struct CellState(bool IsAlive, Color Color)
 {
-    Dead = 0,
-    Alive = 1
+    public static readonly CellState Alive = new(true, Color.WhiteSmoke);
+    public static readonly CellState Dead = new(false, Color.Black);
 }

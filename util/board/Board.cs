@@ -5,7 +5,7 @@ namespace GameOfLife.util.board;
 
 public class Board
 {
-    private Cell[] _cells;
+    private List<Cell> _cells;
     
     public int Width { get; protected init; }
     public int Height { get; protected init; }
@@ -20,18 +20,25 @@ public class Board
         Width = width;
         Height = height;
         
-        List<Cell> cells = new List<Cell>(Size);
+        _cells = new List<Cell>();
 
-        for (int i = 0; i < cells.Count; i++)
+        for (int i = 0; i < Size; i++)
         {
-            cells[0] = new Cell(GetPositionOfIndex(i));
+            _cells.Add(new Cell(GetPositionOfIndex(i)));
         }
+    }
+
+    public (int x, int y) GetCoordinatesOfIndex(int i)
+    {
+        int x = i % Width;
+        int y = i / Width;
+        
+        return (x, y);
     }
 
     public CellPosition GetPositionOfIndex(int i)
     {
-        int x = i % Width;
-        int y = i / Width;
+        (int x, int y) = GetCoordinatesOfIndex(i);
         
         return new CellPosition(x, y);
     }
@@ -79,7 +86,7 @@ public class Board
                 
                 neighbors.Add(neighbor);
             }
-            catch (IndexOutOfRangeException)
+            catch (ArgumentOutOfRangeException)
             {
                 continue;
             }
@@ -101,6 +108,29 @@ public class Board
     public Cell CellAt(CellPosition position)
     {
         return CellAt(GetIndexOfPosition(position));
+    }
+
+    public Board Copy()
+    {
+        Board copy = new Board(Width, Height);
+        
+        copy.Overwrite(this);
+        
+        return copy;
+    }
+
+    public void Overwrite(Board other)
+    {
+        if (Size != other.Size)
+        {
+            throw new MismatchedBoardSizeException();
+        }
+        
+        for (int i = 0; i < Size; i++)
+        {
+            //Console.WriteLine(i);
+            CellAt(i).OverwriteState(other.CellAt(i));
+        }
     }
 
     public override string ToString() => "<GameOfLife.util.board.Board>";

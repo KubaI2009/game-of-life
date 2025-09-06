@@ -1,6 +1,6 @@
 namespace GameOfLife;
 
-public partial class GameOfLifeEngine : Form
+public sealed partial class GameOfLifeEngine : Form
 {
     public GameOfLifeEngine()
     {
